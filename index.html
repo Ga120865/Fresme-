@@ -5,47 +5,44 @@
   <title>Fresme - Pedidos</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <h1 class="title">Fresme - Crear Pedido</h1>
+  <h1 class="title">Crear Pedido</h1>
 
-  <div class="container">
+  <div class="card">
 
-    <!-- Selección de tamaño -->
-    <label for="size">Tamaño:</label>
+    <label>Tamaño:</label>
     <select id="size">
-      <option value="" disabled selected>Seleccione...</option>
-      <option value="small">Pequeño (1 topping)</option>
-      <option value="medium">Mediano (2 toppings)</option>
-      <option value="large">Grande (3 toppings)</option>
+      <option value="" disabled selected>Selecciona...</option>
+      <option value="Pequeño">Pequeño (1 topping)</option>
+      <option value="Mediano">Mediano (2 toppings)</option>
+      <option value="Grande">Grande (3 toppings)</option>
     </select>
 
-    <!-- TOPPINGS -->
     <h3>Toppings:</h3>
-    <div class="options" id="toppings">
+    <div class="grid" id="toppings">
       <label><input type="checkbox" value="Oreo"> Oreo</label>
-      <label><input type="checkbox" value="Brownie"> Brownie</label>
       <label><input type="checkbox" value="Fresas"> Fresas</label>
+      <label><input type="checkbox" value="Brownie"> Brownie</label>
+      <label><input type="checkbox" value="M&M"> M&M</label>
       <label><input type="checkbox" value="Mango"> Mango</label>
-      <label><input type="checkbox" value="Chocolate Chips"> Chocolate Chips</label>
     </div>
 
-    <!-- SALSAS -->
     <h3>Salsas:</h3>
-    <div class="options" id="sauces">
+    <div class="grid" id="sauces">
       <label><input type="checkbox" value="Chocolate"> Chocolate</label>
       <label><input type="checkbox" value="Caramelo"> Caramelo</label>
       <label><input type="checkbox" value="Fresa"> Fresa</label>
       <label><input type="checkbox" value="Nutella"> Nutella</label>
     </div>
 
-    <!-- Botón -->
     <button id="sendOrder">Enviar Pedido</button>
 
     <p id="msg"></p>
-
   </div>
 
   <script type="module" src="app.js"></script>
+
 </body>
 </html>
