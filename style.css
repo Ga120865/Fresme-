@@ -1,4 +1,4 @@
-/* kiosk.css - estilo tipo iPad / tarjetas grandes */
+/* style.css - estilo tipo iPad / tarjetas grandes */
 :root{
   --bg: #f6f2f5;
   --card: #ffffff;
@@ -98,3 +98,4 @@ h2{margin:0 0 12px 0;font-size:18px}
 }
 .note{color:var(--muted);font-size:13px;margin-top:8px}
 .msg{color:green;margin-top:8px}
+
