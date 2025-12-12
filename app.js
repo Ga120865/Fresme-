@@ -3,7 +3,7 @@ import { db } from "./firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
 /* opciones */
-const salsasList = ["Chocolate","Pistacho","Caramelo","Frambuesa","Chantilly","Nutella","Leche Condensada"];
+const salsasList = ["Chocolate","Pistacho"];
 const toppingsList = ["Grageas","Gotas de chocolate","Oreo"];
 
 /* estado */
@@ -136,4 +136,5 @@ document.getElementById("sendOrder").onclick = async ()=>{
     console.error(err); msgEl.style.color="red"; msgEl.innerText="Error enviando pedido. Revisa consola.";
   }
 };
+
 
