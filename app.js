@@ -1,178 +1,113 @@
 // app.js
-import { db } from "../firebase.js";
+import { db } from "./firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
 
-/*
-  Salsas y toppings (según lo definiste):
-  - Salsas: Chocolate blanco, Chocolate negro, Pistacho, Kinder Bueno, Frambuesa
-  - Toppings: Chispas de colores, Chispas de chocolate, Caramelo, Galletas, Oreo
-*/
+// Datos
+const salsasList = ["Chocolate blanco", "Chocolate negro", "Pistacho", "Kinder Bueno", "Frambuesa"];
+const toppingsList = ["Chispas de colores", "Chispas de chocolate", "Caramelo", "Galletas", "Oreo"];
 
-const salsasList = [
-  "Chocolate blanco",
-  "Chocolate negro",
-  "Pistacho",
-  "Kinder Bueno",
-  "Frambuesa"
-];
-
-const toppingsList = [
-  "Chispas de colores",
-  "Chispas de chocolate",
-  "Caramelo",
-  "Galletas",
-  "Oreo"
-];
-
-/* Estado */
+// Estado
+let tipoOrden = "";
+let sizePrice = 0;
 let maxSalsas = 0;
 let maxToppings = 0;
-let extraSalsas = 0;
-let extraToppings = 0;
-let basePrice = 0;
-let chosenSizeLabel = null;
 
-/* Elementos DOM */
-const salsasBox = document.getElementById("salsas");
-const toppingsBox = document.getElementById("toppings");
-const totalEl = document.getElementById("total");
-const basePriceEl = document.getElementById("basePrice");
-const extrasPriceEl = document.getElementById("extrasPrice");
-const msgEl = document.getElementById("msg");
+let selectedSalsas = [];
+let selectedToppings = [];
 
-/* build buttons */
-function buildButtons(list, container) {
-  list.forEach(name => {
+// Insertar salsas y toppings
+function loadOptions() {
+  const salsasBox = document.getElementById("salsas");
+  const toppingsBox = document.getElementById("toppings");
+
+  salsasList.forEach((s) => {
     const btn = document.createElement("button");
-    btn.innerText = name;
-    btn.onclick = () => {
-      btn.classList.toggle("selected");
-      enforceLimits();
-      updateTotals();
-    };
-    container.appendChild(btn);
+    btn.className = "item";
+    btn.textContent = s;
+    btn.onclick = () => toggleSalsa(s);
+    salsasBox.appendChild(btn);
+  });
+
+  toppingsList.forEach((t) => {
+    const btn = document.createElement("button");
+    btn.className = "item";
+    btn.textContent = t;
+    btn.onclick = () => toggleTopping(t);
+    toppingsBox.appendChild(btn);
   });
 }
-buildButtons(salsasList, salsasBox);
-buildButtons(toppingsList, toppingsBox);
 
-/* sizes */
-document.querySelectorAll(".size-btn").forEach(btn => {
+loadOptions();
+
+// Selección tipo
+document.querySelectorAll(".option").forEach((btn) => {
   btn.onclick = () => {
-    document.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));
-    btn.classList.add("selected");
-
-    basePrice = parseFloat(btn.dataset.price);
-    maxSalsas = parseInt(btn.dataset.salsas,10);
-    maxToppings = parseInt(btn.dataset.toppings,10);
-    chosenSizeLabel = btn.innerText;
-
-    basePriceEl.innerText = basePrice.toFixed(2);
-    enforceLimits();
-    updateTotals();
+    tipoOrden = btn.dataset.value;
+    document.querySelectorAll(".option").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
   };
 });
 
-/* order type (para llevar / comer) */
-let orderType = null;
-document.querySelectorAll("#orderType .pill").forEach(btn=>{
+// Selección tamaño
+document.querySelectorAll(".size").forEach((btn) => {
   btn.onclick = () => {
-    document.querySelectorAll("#orderType .pill").forEach(b=>b.classList.remove("selected"));
-    btn.classList.add("selected");
-    orderType = btn.dataset.value;
+    sizePrice = parseFloat(btn.dataset.price);
+    maxSalsas = parseInt(btn.dataset.salsas);
+    maxToppings = parseInt(btn.dataset.toppings);
+
+    document.querySelectorAll(".size").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    updateTotal();
   };
 });
 
-/* extras buttons */
-document.getElementById("addExtraTopping").onclick = () => { extraToppings++; enforceLimits(); updateTotals(); };
-document.getElementById("removeExtraTopping").onclick = () => { if(extraToppings>0) extraToppings--; enforceLimits(); updateTotals(); };
-document.getElementById("addExtraSalsa").onclick = () => { extraSalsas++; enforceLimits(); updateTotals(); };
-document.getElementById("removeExtraSalsa").onclick = () => { if(extraSalsas>0) extraSalsas--; enforceLimits(); updateTotals(); };
-
-/* enforceLimits: bloquea botones cuando se llega al limite */
-function enforceLimits() {
-  const selectedSalsas = salsasBox.querySelectorAll("button.selected").length;
-  const selectedToppings = toppingsBox.querySelectorAll("button.selected").length;
-
-  const limitS = maxSalsas + extraSalsas;
-  const limitT = maxToppings + extraToppings;
-
-  // salsas
-  salsasBox.querySelectorAll("button").forEach(btn => {
-    if(!btn.classList.contains("selected") && selectedSalsas >= limitS){
-      btn.disabled = true;
-      btn.style.opacity = "0.45";
-      btn.style.cursor = "not-allowed";
-    } else {
-      btn.disabled = false;
-      btn.style.opacity = "";
-      btn.style.cursor = "";
-    }
-  });
-
-  // toppings
-  toppingsBox.querySelectorAll("button").forEach(btn => {
-    if(!btn.classList.contains("selected") && selectedToppings >= limitT){
-      btn.disabled = true;
-      btn.style.opacity = "0.45";
-      btn.style.cursor = "not-allowed";
-    } else {
-      btn.disabled = false;
-      btn.style.opacity = "";
-      btn.style.cursor = "";
-    }
-  });
+function toggleSalsa(s) {
+  if (selectedSalsas.includes(s)) {
+    selectedSalsas = selectedSalsas.filter(x => x !== s);
+  } else if (selectedSalsas.length < maxSalsas) {
+    selectedSalsas.push(s);
+  }
+  updateTotal();
 }
 
-/* update totals */
-function updateTotals() {
-  const extrasCost = (extraToppings * 0.50) + (extraSalsas * 0.75);
-  extrasPriceEl.innerText = extrasCost.toFixed(2);
-  const total = (basePrice || 0) + extrasCost;
-  totalEl.innerText = total.toFixed(2);
+function toggleTopping(t) {
+  if (selectedToppings.includes(t)) {
+    selectedToppings = selectedToppings.filter(x => x !== t);
+  } else if (selectedToppings.length < maxToppings) {
+    selectedToppings.push(t);
+  }
+  updateTotal();
 }
 
-/* send order */
+function updateTotal() {
+  const total = sizePrice;
+  document.getElementById("total").textContent = total.toFixed(2);
+}
+
+// Enviar pedido
 document.getElementById("sendOrder").onclick = async () => {
-  msgEl.innerText = "";
   const nombre = document.getElementById("nombre").value.trim();
   const apellido = document.getElementById("apellido").value.trim();
 
-  if(!nombre || !apellido){ msgEl.innerText = "Ingresa nombre y apellido"; return; }
-  if(!orderType){ msgEl.innerText = "Selecciona si es para llevar o comer aquí"; return; }
-  if(!chosenSizeLabel){ msgEl.innerText = "Selecciona un tamaño"; return; }
+  if (!nombre || !apellido || !tipoOrden || sizePrice === 0) {
+    msg.textContent = "Completa todos los campos.";
+    return;
+  }
 
-  const selectedSalsas = [...salsasBox.querySelectorAll("button.selected")].map(b=>b.innerText);
-  const selectedToppings = [...toppingsBox.querySelectorAll("button.selected")].map(b=>b.innerText);
-
-  if(selectedSalsas.length === 0){ msgEl.innerText = "Selecciona al menos una salsa"; return; }
-  if(selectedToppings.length === 0){ msgEl.innerText = "Selecciona al menos un topping"; return; }
-
-  const order = {
+  const pedido = {
     nombre,
     apellido,
-    tipo: orderType,
-    size: chosenSizeLabel,
-    basePrice,
-    extraToppings,
-    extraSalsas,
+    tipo: tipoOrden,
+    tamaño: sizePrice,
     salsas: selectedSalsas,
     toppings: selectedToppings,
-    total: parseFloat(document.getElementById("total").innerText),
-    time: new Date().toLocaleString(),
-    status: "Pendiente"
+    total: sizePrice,
+    hora: new Date().toLocaleTimeString()
   };
 
-  try {
-    await push(ref(db, "orders/"), order);
-    msgEl.style.color = "green";
-    msgEl.innerText = "Pedido enviado correctamente!";
-    // reset form (simple)
-    setTimeout(()=> location.reload(), 800);
-  } catch (err){
-    console.error(err);
-    msgEl.style.color = "red";
-    msgEl.innerText = "Error enviando pedido. Revisa consola.";
-  }
-};
+  await push(ref(db, "pedidos/"), pedido);
 
+  msg.textContent = "Pedido enviado!";
+  setTimeout(() => (msg.textContent = ""), 2000);
+};
