@@ -1,54 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fresme — Pedidos</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresme — Pedido</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  <main class="app">
 
-    <h1>Personaliza tus Fresas</h1>
+    <main class="container">
+        <h1>Fresme 🍓</h1>
 
-    <section>
-      <h2>Tus Datos</h2>
-      <input id="nombre" placeholder="Nombre" />
-      <input id="apellido" placeholder="Apellido" />
-    </section>
+        <form id="pedidoForm">
 
-    <section>
-      <h2>Tipo de Orden</h2>
-      <button class="option" data-value="Para comer aquí">Comer aquí</button>
-      <button class="option" data-value="Para llevar">Para llevar</button>
-    </section>
+            <label>Nombre:</label>
+            <input type="text" id="nombre" required>
 
-    <section>
-      <h2>Tamaño</h2>
-      <button class="size" data-price="2.50" data-salsas="1" data-toppings="1">Pequeño $2.50</button>
-      <button class="size" data-price="2.90" data-salsas="1" data-toppings="2">Mediano $2.90</button>
-      <button class="size" data-price="3.25" data-salsas="2" data-toppings="2">Grande $3.25</button>
-    </section>
+            <label>Apellido:</label>
+            <input type="text" id="apellido" required>
 
-    <section>
-      <h2>Salsas</h2>
-      <div id="salsas"></div>
-    </section>
+            <label>Tamaño:</label>
+            <select id="size" required>
+                <option value="Pequeño">Pequeño</option>
+                <option value="Mediano">Mediano</option>
+                <option value="Grande">Grande</option>
+            </select>
 
-    <section>
-      <h2>Toppings</h2>
-      <div id="toppings"></div>
-    </section>
+            <label>Salsas:</label>
+            <input type="text" id="salsas" placeholder="Salsa 1, Salsa 2">
 
-    <section class="total">
-      <h2>Total: $<span id="total">0.00</span></h2>
-      <button id="sendOrder">Enviar Pedido</button>
-      <p id="msg"></p>
-    </section>
+            <label>Toppings:</label>
+            <input type="text" id="toppings" placeholder="Top 1, Top 2">
 
-  </main>
+            <label>Total:</label>
+            <input type="number" id="total" step="0.01" required>
 
-  <script type="module" src="app.js"></script>
+            <button type="submit">Enviar Pedido</button>
+
+        </form>
+    </main>
+
+    <script type="module" src="app.js"></script>
 </body>
 </html>
