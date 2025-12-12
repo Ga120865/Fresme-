@@ -2,83 +2,50 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fresme — Pedidos</title>
+  <title>Fresme - Pedidos</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <header>
-    <h1>Arma tu Fresme</h1>
-  </header>
+  <h1 class="title">Fresme - Crear Pedido</h1>
 
-  <main>
+  <div class="container">
 
-    <!-- NOMBRE -->
-    <div class="section">
-      <label>Nombre:</label>
-      <input type="text" id="nombre">
-    </div>
+    <!-- Selección de tamaño -->
+    <label for="size">Tamaño:</label>
+    <select id="size">
+      <option value="" disabled selected>Seleccione...</option>
+      <option value="small">Pequeño (1 topping)</option>
+      <option value="medium">Mediano (2 toppings)</option>
+      <option value="large">Grande (3 toppings)</option>
+    </select>
 
-    <div class="section">
-      <label>Apellido:</label>
-      <input type="text" id="apellido">
-    </div>
-
-    <!-- TIPO -->
-    <div class="section">
-      <label>Tipo:</label>
-      <select id="tipo">
-        <option value="Copa">Copa</option>
-        <option value="Vaso">Vaso</option>
-      </select>
-    </div>
-
-    <!-- TAMAÑOS -->
-    <div class="section">
-      <h3>Elige el Tamaño</h3>
-      <div class="sizes">
-        <label><input type="radio" name="size" value="Pequeño" data-max="3" data-price="2.50"> Pequeño</label>
-        <label><input type="radio" name="size" value="Mediano" data-max="5" data-price="3.50"> Mediano</label>
-        <label><input type="radio" name="size" value="Grande" data-max="7" data-price="4.50"> Grande</label>
-      </div>
+    <!-- TOPPINGS -->
+    <h3>Toppings:</h3>
+    <div class="options" id="toppings">
+      <label><input type="checkbox" value="Oreo"> Oreo</label>
+      <label><input type="checkbox" value="Brownie"> Brownie</label>
+      <label><input type="checkbox" value="Fresas"> Fresas</label>
+      <label><input type="checkbox" value="Mango"> Mango</label>
+      <label><input type="checkbox" value="Chocolate Chips"> Chocolate Chips</label>
     </div>
 
     <!-- SALSAS -->
-    <div class="section">
-      <h3>Salsas (<span id="salsasCount">0</span>/<span id="salsasMax">0</span>)</h3>
-      <div class="options" id="salsasOptions">
-        <label><input type="checkbox" class="salsa" value="Chocolate"> Chocolate</label>
-        <label><input type="checkbox" class="salsa" value="Fresa"> Fresa</label>
-        <label><input type="checkbox" class="salsa" value="Mango"> Mango</label>
-        <label><input type="checkbox" class="salsa" value="Mora"> Mora</label>
-      </div>
+    <h3>Salsas:</h3>
+    <div class="options" id="sauces">
+      <label><input type="checkbox" value="Chocolate"> Chocolate</label>
+      <label><input type="checkbox" value="Caramelo"> Caramelo</label>
+      <label><input type="checkbox" value="Fresa"> Fresa</label>
+      <label><input type="checkbox" value="Nutella"> Nutella</label>
     </div>
 
-    <!-- TOPPINGS -->
-    <div class="section">
-      <h3>Toppings (<span id="toppingsCount">0</span>/<span id="toppingsMax">0</span>)</h3>
-      <div class="options" id="toppingsOptions">
-        <label><input type="checkbox" class="topping" value="Oreo"> Oreo</label>
-        <label><input type="checkbox" class="topping" value="Chispas"> Chispas</label>
-        <label><input type="checkbox" class="topping" value="Galleta"> Galleta</label>
-        <label><input type="checkbox" class="topping" value="Brownie"> Brownie</label>
-        <label><input type="checkbox" class="topping" value="Frutilla"> Frutilla</label>
-      </div>
-    </div>
+    <!-- Botón -->
+    <button id="sendOrder">Enviar Pedido</button>
 
-    <!-- TOTAL -->
-    <div class="total-box">
-      Total: $<span id="total">0.00</span>
-    </div>
+    <p id="msg"></p>
 
-    <!-- BOTÓN -->
-    <button id="enviarPedido">Enviar Pedido</button>
-
-  </main>
+  </div>
 
   <script type="module" src="app.js"></script>
-
 </body>
 </html>
-
