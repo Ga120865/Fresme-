@@ -1,7 +1,8 @@
-// firebase.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+// Import Firebase SDK
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCGAfu9XB2EcVhV4kEv_xNOKI5YoLjZhr4",
   authDomain: "fresme-app.firebaseapp.com",
@@ -13,5 +14,6 @@ const firebaseConfig = {
   measurementId: "G-RPSCTLQ9RG"
 };
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase
+export const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
