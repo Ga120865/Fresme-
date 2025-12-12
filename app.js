@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
+// TU CONFIG EXACTA
 const firebaseConfig = {
   apiKey: "AIzaSyCGAfu9XB2EcVhV4kEv_xNOKI5YoLjZhr4",
   authDomain: "fresme-app.firebaseapp.com",
@@ -12,47 +13,41 @@ const firebaseConfig = {
   measurementId: "G-RPSCTLQ9RG"
 };
 
-// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
-// Selección de elementos
+// ELEMENTOS
 const sizeSelect = document.getElementById("size");
-const toppingBoxes = document.querySelectorAll("#toppings input");
+const toppingsBoxes = document.querySelectorAll("#toppings input");
 const sauceBoxes = document.querySelectorAll("#sauces input");
-const sendBtn = document.getElementById("sendOrder");
+const sendOrder = document.getElementById("sendOrder");
 const msg = document.getElementById("msg");
 
-// Limites de toppings por tamaño
-const toppingLimits = {
-  small: 1,
-  medium: 2,
-  large: 3
+// LIMITE DE TOPPINGS
+const limits = {
+  Pequeño: 1,
+  Mediano: 2,
+  Grande: 3
 };
 
-// BLOQUEO AUTOMÁTICO DE TOPPINGS
+// BLOQUEAR SEGÚN TAMAÑO
 sizeSelect.addEventListener("change", () => {
-  let limit = toppingLimits[sizeSelect.value];
+  toppingsBoxes.forEach(c => { c.checked = false; c.disabled = false; });
+});
 
-  toppingBoxes.forEach(box => box.checked = false);
+toppingsBoxes.forEach(box => {
+  box.addEventListener("change", () => {
+    const limit = limits[sizeSelect.value] || 0;
+    const selected = document.querySelectorAll("#toppings input:checked").length;
 
-  toppingBoxes.forEach(box => {
-    box.disabled = false;
-    box.addEventListener("change", () => {
-      const selected = document.querySelectorAll("#toppings input:checked").length;
-      if (selected >= limit) {
-        toppingBoxes.forEach(b => {
-          if (!b.checked) b.disabled = true;
-        });
-      } else {
-        toppingBoxes.forEach(b => b.disabled = false);
-      }
+    toppingsBoxes.forEach(b => {
+      if (!b.checked) b.disabled = selected >= limit;
     });
   });
 });
 
 // ENVIAR PEDIDO
-sendBtn.addEventListener("click", () => {
+sendOrder.addEventListener("click", () => {
   const size = sizeSelect.value;
   const toppings = [...document.querySelectorAll("#toppings input:checked")].map(x => x.value);
   const sauces = [...document.querySelectorAll("#sauces input:checked")].map(x => x.value);
@@ -72,16 +67,12 @@ sendBtn.addEventListener("click", () => {
 
   push(ref(db, "orders"), order)
     .then(() => {
-      msg.textContent = "Pedido enviado ✔️";
       msg.style.color = "green";
+      msg.textContent = "Pedido enviado ✔️";
 
       sizeSelect.value = "";
-      toppingBoxes.forEach(b => { b.checked = false; b.disabled = false; });
-      sauceBoxes.forEach(b => b.checked = false);
+      toppingsBoxes.forEach(x => { x.checked = false; x.disabled = false; });
+      sauceBoxes.forEach(x => (x.checked = false));
     })
-    .catch(err => {
-      msg.textContent = "Error al enviar.";
-      msg.style.color = "red";
-      console.error(err);
-    });
+    .catch(err => console.error(err));
 });
