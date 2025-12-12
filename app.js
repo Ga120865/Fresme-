@@ -20,7 +20,7 @@ const db = getDatabase(app);
 
 
 // -------------------------------
-// LÓGICA DE TAMAÑOS / LÍMITES
+// VARIABLES DEL SISTEMA
 // -------------------------------
 const sizeRadios = document.querySelectorAll('input[name="size"]');
 const salsaChecks = document.querySelectorAll('.salsa');
@@ -30,6 +30,10 @@ let maxSalsas = 0;
 let maxToppings = 0;
 let basePrice = 0;
 
+
+// -------------------------------
+// ACTUALIZAR LÍMITES SEGÚN TAMAÑO
+// -------------------------------
 function updateLimits() {
   const selected = document.querySelector('input[name="size"]:checked');
   if (!selected) return;
@@ -43,10 +47,14 @@ function updateLimits() {
   document.getElementById("salsasMax").textContent = max;
   document.getElementById("toppingsMax").textContent = max;
 
-  updateTotal();
   validateSelection();
+  updateTotal();
 }
 
+
+// -------------------------------
+// VALIDAR TOPPINGS Y SALSAS
+// -------------------------------
 function validateSelection() {
   const selectedSalsas = [...salsaChecks].filter(c => c.checked).length;
   const selectedToppings = [...toppingChecks].filter(c => c.checked).length;
@@ -61,12 +69,11 @@ function validateSelection() {
   toppingChecks.forEach(c => {
     c.disabled = !c.checked && selectedToppings >= maxToppings;
   });
-
-  updateTotal();
 }
 
+
 // -------------------------------
-// TOTAL
+// ACTUALIZAR TOTAL
 // -------------------------------
 function updateTotal() {
   const total = basePrice;
@@ -76,36 +83,54 @@ function updateTotal() {
 
 // EVENTOS
 sizeRadios.forEach(r => r.addEventListener("change", updateLimits));
-salsaChecks.forEach(c => c.addEventListener("change", validateSelection));
-toppingChecks.forEach(c => c.addEventListener("change", validateSelection));
+salsaChecks.forEach(c => c.addEventListener("change", () => {
+  validateSelection();
+  updateTotal();
+}));
+toppingChecks.forEach(c => c.addEventListener("change", () => {
+  validateSelection();
+  updateTotal();
+}));
 
 
 // -------------------------------
 // ENVIAR PEDIDO A FIREBASE
 // -------------------------------
 document.getElementById("enviarPedido").addEventListener("click", () => {
-
   const size = document.querySelector('input[name="size"]:checked');
+
   if (!size) {
     alert("Selecciona un tamaño.");
     return;
   }
 
-  const data = {
-    nombre: document.getElementById("nombre").value,
-    apellido: document.getElementById("apellido").value,
+  const nombre = document.getElementById("nombre").value.trim();
+  const apellido = document.getElementById("apellido").value.trim();
+
+  if (!nombre || !apellido) {
+    alert("Escribe tu nombre y apellido.");
+    return;
+  }
+
+  const pedido = {
+    nombre,
+    apellido,
     tipo: document.getElementById("tipo").value,
     size: size.value,
-    basePrice: basePrice,
     salsas: [...salsaChecks].filter(c => c.checked).map(c => c.value),
     toppings: [...toppingChecks].filter(c => c.checked).map(c => c.value),
     total: basePrice,
-    time: new Date().toLocaleTimeString(),
-    status: "Pendiente"
+    timestamp: Date.now()
   };
 
-  push(ref(db, "orders/"), data);
-
-  alert("Pedido enviado!");
-  location.reload();
+  // ENVÍA AL PANEL — AQUÍ ESTABA TU ERROR ⚠️
+  const pedidosRef = ref(db, "pedidos");
+  push(pedidosRef, pedido)
+    .then(() => {
+      alert("¡Pedido enviado con éxito!");
+      window.location.reload();
+    })
+    .catch(err => {
+      console.error("Error al enviar:", err);
+    });
 });
