@@ -1,48 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Fresme - Pedidos</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Fresme Kiosk</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-  <h1 class="title">Crear Pedido</h1>
+<h1>Arma tu Fresme</h1>
 
-  <div class="card">
+<div class="card">
+    <h2>Elige el tamaño</h2>
+    <button class="size-btn" data-size="small">Small (2 toppings)</button>
+    <button class="size-btn" data-size="medium">Medium (3 toppings)</button>
+    <button class="size-btn" data-size="large">Large (4 toppings)</button>
+</div>
 
-    <label>Tamaño:</label>
-    <select id="size">
-      <option value="" disabled selected>Selecciona...</option>
-      <option value="Pequeño">Pequeño (1 topping)</option>
-      <option value="Mediano">Mediano (2 toppings)</option>
-      <option value="Grande">Grande (3 toppings)</option>
+<div class="card">
+    <h2>Elige tus toppings</h2>
+    <div id="toppings"></div>
+</div>
+
+<div class="card">
+    <h2>Elige la salsa</h2>
+    <select id="salsa">
+        <option value="">Selecciona una salsa</option>
+        <option value="Chocolate">Chocolate</option>
+        <option value="Caramelo">Caramelo</option>
+        <option value="Fresa">Fresa</option>
+        <option value="Nutella">Nutella</option>
     </select>
+</div>
 
-    <h3>Toppings:</h3>
-    <div class="grid" id="toppings">
-      <label><input type="checkbox" value="Oreo"> Oreo</label>
-      <label><input type="checkbox" value="Fresas"> Fresas</label>
-      <label><input type="checkbox" value="Brownie"> Brownie</label>
-      <label><input type="checkbox" value="M&M"> M&M</label>
-      <label><input type="checkbox" value="Mango"> Mango</label>
-    </div>
+<button id="enviarPedido" class="submit-btn">Enviar Pedido</button>
 
-    <h3>Salsas:</h3>
-    <div class="grid" id="sauces">
-      <label><input type="checkbox" value="Chocolate"> Chocolate</label>
-      <label><input type="checkbox" value="Caramelo"> Caramelo</label>
-      <label><input type="checkbox" value="Fresa"> Fresa</label>
-      <label><input type="checkbox" value="Nutella"> Nutella</label>
-    </div>
-
-    <button id="sendOrder">Enviar Pedido</button>
-
-    <p id="msg"></p>
-  </div>
-
-  <script type="module" src="app.js"></script>
+<script type="module" src="app.js"></script>
 
 </body>
 </html>
