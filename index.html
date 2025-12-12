@@ -1,45 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fresme — Pedido</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fresme — Pedidos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <main class="container">
-        <h1>Fresme 🍓</h1>
+  <header>
+    <h1>Arma tu Fresme</h1>
+  </header>
 
-        <form id="pedidoForm">
+  <main>
 
-            <label>Nombre:</label>
-            <input type="text" id="nombre" required>
+    <!-- NOMBRE -->
+    <div class="section">
+      <label>Nombre:</label>
+      <input type="text" id="nombre">
+    </div>
 
-            <label>Apellido:</label>
-            <input type="text" id="apellido" required>
+    <div class="section">
+      <label>Apellido:</label>
+      <input type="text" id="apellido">
+    </div>
 
-            <label>Tamaño:</label>
-            <select id="size" required>
-                <option value="Pequeño">Pequeño</option>
-                <option value="Mediano">Mediano</option>
-                <option value="Grande">Grande</option>
-            </select>
+    <!-- TIPO -->
+    <div class="section">
+      <label>Tipo:</label>
+      <select id="tipo">
+        <option value="Copa">Copa</option>
+        <option value="Vaso">Vaso</option>
+      </select>
+    </div>
 
-            <label>Salsas:</label>
-            <input type="text" id="salsas" placeholder="Salsa 1, Salsa 2">
+    <!-- TAMAÑOS -->
+    <div class="section">
+      <h3>Elige el Tamaño</h3>
+      <div class="sizes">
+        <label><input type="radio" name="size" value="Pequeño" data-max="3" data-price="2.50"> Pequeño</label>
+        <label><input type="radio" name="size" value="Mediano" data-max="5" data-price="3.50"> Mediano</label>
+        <label><input type="radio" name="size" value="Grande" data-max="7" data-price="4.50"> Grande</label>
+      </div>
+    </div>
 
-            <label>Toppings:</label>
-            <input type="text" id="toppings" placeholder="Top 1, Top 2">
+    <!-- SALSAS -->
+    <div class="section">
+      <h3>Salsas (<span id="salsasCount">0</span>/<span id="salsasMax">0</span>)</h3>
+      <div class="options" id="salsasOptions">
+        <label><input type="checkbox" class="salsa" value="Chocolate"> Chocolate</label>
+        <label><input type="checkbox" class="salsa" value="Fresa"> Fresa</label>
+        <label><input type="checkbox" class="salsa" value="Mango"> Mango</label>
+        <label><input type="checkbox" class="salsa" value="Mora"> Mora</label>
+      </div>
+    </div>
 
-            <label>Total:</label>
-            <input type="number" id="total" step="0.01" required>
+    <!-- TOPPINGS -->
+    <div class="section">
+      <h3>Toppings (<span id="toppingsCount">0</span>/<span id="toppingsMax">0</span>)</h3>
+      <div class="options" id="toppingsOptions">
+        <label><input type="checkbox" class="topping" value="Oreo"> Oreo</label>
+        <label><input type="checkbox" class="topping" value="Chispas"> Chispas</label>
+        <label><input type="checkbox" class="topping" value="Galleta"> Galleta</label>
+        <label><input type="checkbox" class="topping" value="Brownie"> Brownie</label>
+        <label><input type="checkbox" class="topping" value="Frutilla"> Frutilla</label>
+      </div>
+    </div>
 
-            <button type="submit">Enviar Pedido</button>
+    <!-- TOTAL -->
+    <div class="total-box">
+      Total: $<span id="total">0.00</span>
+    </div>
 
-        </form>
-    </main>
+    <!-- BOTÓN -->
+    <button id="enviarPedido">Enviar Pedido</button>
 
-    <script type="module" src="app.js"></script>
+  </main>
+
+  <script type="module" src="app.js"></script>
+
 </body>
 </html>
