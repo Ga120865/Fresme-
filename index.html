@@ -2,76 +2,53 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fresme — Kiosk</title>
-  <link rel="stylesheet" href="kiosk.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fresme — Pedidos</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <main class="kiosk">
-    <header class="kiosk-header">
-      <h1>Personaliza tus Fresas</h1>
-    </header>
+  <main class="app">
 
-    <section class="card">
-      <h2>Nombre y Apellido</h2>
-      <div class="row inputs">
-        <input id="nombre" placeholder="Nombre" />
-        <input id="apellido" placeholder="Apellido" />
-      </div>
+    <h1>Personaliza tus Fresas</h1>
 
-      <h2>¿Para llevar o comer aquí?</h2>
-      <div class="row options" id="orderType">
-        <button class="pill" data-value="Para comer aquí">Comer aquí</button>
-        <button class="pill" data-value="Para llevar">Para llevar</button>
-      </div>
+    <section>
+      <h2>Tus Datos</h2>
+      <input id="nombre" placeholder="Nombre" />
+      <input id="apellido" placeholder="Apellido" />
     </section>
 
-    <section class="card">
-      <h2>Elige el tamaño</h2>
-      <div class="row options sizes">
-        <button class="size-btn" data-price="2.50" data-salsas="1" data-toppings="1">Pequeño — $2.50</button>
-        <button class="size-btn" data-price="2.90" data-salsas="1" data-toppings="2">Mediano — $2.90</button>
-        <button class="size-btn" data-price="3.25" data-salsas="2" data-toppings="2">Grande — $3.25</button>
-      </div>
+    <section>
+      <h2>Tipo de Orden</h2>
+      <button class="option" data-value="Para comer aquí">Comer aquí</button>
+      <button class="option" data-value="Para llevar">Para llevar</button>
     </section>
 
-    <section class="card">
-      <h2>Salsas <small>(líquido)</small></h2>
-      <div id="salsas" class="grid"></div>
-      <div class="row extras">
-        <button id="addExtraSalsa" class="extra">+ Extra Salsa ($0.75)</button>
-        <button id="removeExtraSalsa" class="extra danger">– Quitar Salsa Extra</button>
-      </div>
-      <p class="note">Límite según tamaño. Usa botón de extra si quieres más.</p>
+    <section>
+      <h2>Tamaño</h2>
+      <button class="size" data-price="2.50" data-salsas="1" data-toppings="1">Pequeño $2.50</button>
+      <button class="size" data-price="2.90" data-salsas="1" data-toppings="2">Mediano $2.90</button>
+      <button class="size" data-price="3.25" data-salsas="2" data-toppings="2">Grande $3.25</button>
     </section>
 
-    <section class="card">
-      <h2>Toppings <small>(secos)</small></h2>
-      <div id="toppings" class="grid"></div>
-      <div class="row extras">
-        <button id="addExtraTopping" class="extra">+ Extra Topping ($0.50)</button>
-        <button id="removeExtraTopping" class="extra danger">– Quitar Topping Extra</button>
-      </div>
-      <p class="note">Límite según tamaño. Extras agregan costo.</p>
+    <section>
+      <h2>Salsas</h2>
+      <div id="salsas"></div>
     </section>
 
-    <section class="card summary">
-      <div class="row">
-        <div><strong>Subtotal base:</strong> $<span id="basePrice">0.00</span></div>
-        <div><strong>Extras:</strong> $<span id="extrasPrice">0.00</span></div>
-      </div>
-      <div class="row total">
-        <h2>Total: $<span id="total">0.00</span></h2>
-      </div>
-
-      <div class="row">
-        <button id="sendOrder" class="send">Enviar Pedido</button>
-      </div>
-      <p id="msg" class="msg"></p>
+    <section>
+      <h2>Toppings</h2>
+      <div id="toppings"></div>
     </section>
+
+    <section class="total">
+      <h2>Total: $<span id="total">0.00</span></h2>
+      <button id="sendOrder">Enviar Pedido</button>
+      <p id="msg"></p>
+    </section>
+
   </main>
 
   <script type="module" src="app.js"></script>
 </body>
 </html>
-
