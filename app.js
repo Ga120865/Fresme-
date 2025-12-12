@@ -1,4 +1,4 @@
-// kiosk.js
+// app.js
 import { db } from "../firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
 
@@ -175,3 +175,4 @@ document.getElementById("sendOrder").onclick = async () => {
     msgEl.innerText = "Error enviando pedido. Revisa consola.";
   }
 };
+
