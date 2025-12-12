@@ -2,9 +2,21 @@
 import { db } from "./firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
-/* opciones */
-const salsasList = ["Chocolate","Pistacho"];
-const toppingsList = ["Grageas","Gotas de chocolate","Oreo"];
+/* opciones — ACTUALIZADAS */
+const salsasList = [
+  "Frambuesa",
+  "Chocolate",
+  "Pistacho",
+  "Nutella",
+  "Chantilly",
+  "Leche Condensada"
+];
+
+const toppingsList = [
+  "Oreo",
+  "Grageas",
+  "Gotas de chocolate"
+];
 
 /* estado */
 let maxSalsas = 0, maxToppings = 0;
@@ -71,7 +83,7 @@ document.getElementById("removeExtraTopping").onclick = ()=> { if(extraToppings>
 document.getElementById("addExtraSalsa").onclick = ()=> { extraSalsas++; enforceLimits(); updateTotals(); };
 document.getElementById("removeExtraSalsa").onclick = ()=> { if(extraSalsas>0) extraSalsas--; enforceLimits(); updateTotals(); };
 
-/* bloqueos */
+/* limites */
 function enforceLimits(){
   const selectedSalsas = salsasBox.querySelectorAll("button.selected").length;
   const selectedToppings = toppingsBox.querySelectorAll("button.selected").length;
@@ -136,5 +148,3 @@ document.getElementById("sendOrder").onclick = async ()=>{
     console.error(err); msgEl.style.color="red"; msgEl.innerText="Error enviando pedido. Revisa consola.";
   }
 };
-
-
