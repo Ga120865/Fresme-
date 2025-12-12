@@ -1,8 +1,5 @@
-// -------------------------------
-// FIREBASE
-// -------------------------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGAfu9XB2EcVhV4kEv_xNOKI5YoLjZhr4",
@@ -15,122 +12,76 @@ const firebaseConfig = {
   measurementId: "G-RPSCTLQ9RG"
 };
 
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+// Selección de elementos
+const sizeSelect = document.getElementById("size");
+const toppingBoxes = document.querySelectorAll("#toppings input");
+const sauceBoxes = document.querySelectorAll("#sauces input");
+const sendBtn = document.getElementById("sendOrder");
+const msg = document.getElementById("msg");
 
-// -------------------------------
-// VARIABLES DEL SISTEMA
-// -------------------------------
-const sizeRadios = document.querySelectorAll('input[name="size"]');
-const salsaChecks = document.querySelectorAll('.salsa');
-const toppingChecks = document.querySelectorAll('.topping');
+// Limites de toppings por tamaño
+const toppingLimits = {
+  small: 1,
+  medium: 2,
+  large: 3
+};
 
-let maxSalsas = 0;
-let maxToppings = 0;
-let basePrice = 0;
+// BLOQUEO AUTOMÁTICO DE TOPPINGS
+sizeSelect.addEventListener("change", () => {
+  let limit = toppingLimits[sizeSelect.value];
 
+  toppingBoxes.forEach(box => box.checked = false);
 
-// -------------------------------
-// ACTUALIZAR LÍMITES SEGÚN TAMAÑO
-// -------------------------------
-function updateLimits() {
-  const selected = document.querySelector('input[name="size"]:checked');
-  if (!selected) return;
-
-  const max = parseInt(selected.dataset.max);
-  basePrice = parseFloat(selected.dataset.price);
-
-  maxSalsas = max;
-  maxToppings = max;
-
-  document.getElementById("salsasMax").textContent = max;
-  document.getElementById("toppingsMax").textContent = max;
-
-  validateSelection();
-  updateTotal();
-}
-
-
-// -------------------------------
-// VALIDAR TOPPINGS Y SALSAS
-// -------------------------------
-function validateSelection() {
-  const selectedSalsas = [...salsaChecks].filter(c => c.checked).length;
-  const selectedToppings = [...toppingChecks].filter(c => c.checked).length;
-
-  document.getElementById("salsasCount").textContent = selectedSalsas;
-  document.getElementById("toppingsCount").textContent = selectedToppings;
-
-  salsaChecks.forEach(c => {
-    c.disabled = !c.checked && selectedSalsas >= maxSalsas;
+  toppingBoxes.forEach(box => {
+    box.disabled = false;
+    box.addEventListener("change", () => {
+      const selected = document.querySelectorAll("#toppings input:checked").length;
+      if (selected >= limit) {
+        toppingBoxes.forEach(b => {
+          if (!b.checked) b.disabled = true;
+        });
+      } else {
+        toppingBoxes.forEach(b => b.disabled = false);
+      }
+    });
   });
+});
 
-  toppingChecks.forEach(c => {
-    c.disabled = !c.checked && selectedToppings >= maxToppings;
-  });
-}
-
-
-// -------------------------------
-// ACTUALIZAR TOTAL
-// -------------------------------
-function updateTotal() {
-  const total = basePrice;
-  document.getElementById("total").textContent = total.toFixed(2);
-}
-
-
-// EVENTOS
-sizeRadios.forEach(r => r.addEventListener("change", updateLimits));
-salsaChecks.forEach(c => c.addEventListener("change", () => {
-  validateSelection();
-  updateTotal();
-}));
-toppingChecks.forEach(c => c.addEventListener("change", () => {
-  validateSelection();
-  updateTotal();
-}));
-
-
-// -------------------------------
-// ENVIAR PEDIDO A FIREBASE
-// -------------------------------
-document.getElementById("enviarPedido").addEventListener("click", () => {
-  const size = document.querySelector('input[name="size"]:checked');
+// ENVIAR PEDIDO
+sendBtn.addEventListener("click", () => {
+  const size = sizeSelect.value;
+  const toppings = [...document.querySelectorAll("#toppings input:checked")].map(x => x.value);
+  const sauces = [...document.querySelectorAll("#sauces input:checked")].map(x => x.value);
 
   if (!size) {
-    alert("Selecciona un tamaño.");
+    msg.textContent = "Selecciona un tamaño.";
+    msg.style.color = "red";
     return;
   }
 
-  const nombre = document.getElementById("nombre").value.trim();
-  const apellido = document.getElementById("apellido").value.trim();
-
-  if (!nombre || !apellido) {
-    alert("Escribe tu nombre y apellido.");
-    return;
-  }
-
-  const pedido = {
-    nombre,
-    apellido,
-    tipo: document.getElementById("tipo").value,
-    size: size.value,
-    salsas: [...salsaChecks].filter(c => c.checked).map(c => c.value),
-    toppings: [...toppingChecks].filter(c => c.checked).map(c => c.value),
-    total: basePrice,
-    timestamp: Date.now()
+  const order = {
+    size,
+    toppings,
+    sauces,
+    time: new Date().toLocaleTimeString()
   };
 
-  // ENVÍA AL PANEL — AQUÍ ESTABA TU ERROR ⚠️
-  const pedidosRef = ref(db, "pedidos");
-  push(pedidosRef, pedido)
+  push(ref(db, "orders"), order)
     .then(() => {
-      alert("¡Pedido enviado con éxito!");
-      window.location.reload();
+      msg.textContent = "Pedido enviado ✔️";
+      msg.style.color = "green";
+
+      sizeSelect.value = "";
+      toppingBoxes.forEach(b => { b.checked = false; b.disabled = false; });
+      sauceBoxes.forEach(b => b.checked = false);
     })
     .catch(err => {
-      console.error("Error al enviar:", err);
+      msg.textContent = "Error al enviar.";
+      msg.style.color = "red";
+      console.error(err);
     });
 });
