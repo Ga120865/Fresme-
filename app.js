@@ -1,78 +1,82 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db } from "./firebase.js";
+import { ref, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// TU CONFIG EXACTA
-const firebaseConfig = {
-  apiKey: "AIzaSyCGAfu9XB2EcVhV4kEv_xNOKI5YoLjZhr4",
-  authDomain: "fresme-app.firebaseapp.com",
-  databaseURL: "https://fresme-app-default-rtdb.firebaseio.com",
-  projectId: "fresme-app",
-  storageBucket: "fresme-app.firebasestorage.app",
-  messagingSenderId: "68669835916",
-  appId: "1:68669835916:web:ed424d557a616fb37149a9",
-  measurementId: "G-RPSCTLQ9RG"
-};
+let tamañoSeleccionado = "";
+let maxToppings = 0;
+let toppingsSeleccionados = [];
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const toppingsList = [
+  "Oreo", "Kinder", "Brownie", "M&M", 
+  "Chispas", "Rolito", "Galaxy", "Frutilla"
+];
 
-// ELEMENTOS
-const sizeSelect = document.getElementById("size");
-const toppingsBoxes = document.querySelectorAll("#toppings input");
-const sauceBoxes = document.querySelectorAll("#sauces input");
-const sendOrder = document.getElementById("sendOrder");
-const msg = document.getElementById("msg");
+const toppingsDiv = document.getElementById("toppings");
 
-// LIMITE DE TOPPINGS
-const limits = {
-  Pequeño: 1,
-  Mediano: 2,
-  Grande: 3
-};
+// Render toppings
+toppingsList.forEach(t => {
+  const btn = document.createElement("button");
+  btn.classList.add("topping-btn");
+  btn.textContent = t;
 
-// BLOQUEAR SEGÚN TAMAÑO
-sizeSelect.addEventListener("change", () => {
-  toppingsBoxes.forEach(c => { c.checked = false; c.disabled = false; });
+  btn.addEventListener("click", () => {
+    if (!btn.classList.contains("selected")) {
+      if (toppingsSeleccionados.length >= maxToppings) return;
+      btn.classList.add("selected");
+      toppingsSeleccionados.push(t);
+    } else {
+      btn.classList.remove("selected");
+      toppingsSeleccionados = toppingsSeleccionados.filter(top => top !== t);
+    }
+  });
+
+  toppingsDiv.appendChild(btn);
 });
 
-toppingsBoxes.forEach(box => {
-  box.addEventListener("change", () => {
-    const limit = limits[sizeSelect.value] || 0;
-    const selected = document.querySelectorAll("#toppings input:checked").length;
+// Tamaños
+document.querySelectorAll(".size-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    tamañoSeleccionado = btn.dataset.size;
 
-    toppingsBoxes.forEach(b => {
-      if (!b.checked) b.disabled = selected >= limit;
-    });
+    document.querySelectorAll(".size-btn").forEach(b => b.classList.remove("selected"));
+    btn.classList.add("selected");
+
+    if (tamañoSeleccionado === "small") maxToppings = 2;
+    if (tamañoSeleccionado === "medium") maxToppings = 3;
+    if (tamañoSeleccionado === "large") maxToppings = 4;
+
+    toppingsSeleccionados = [];
+    document.querySelectorAll(".topping-btn").forEach(t => t.classList.remove("selected"));
   });
 });
 
-// ENVIAR PEDIDO
-sendOrder.addEventListener("click", () => {
-  const size = sizeSelect.value;
-  const toppings = [...document.querySelectorAll("#toppings input:checked")].map(x => x.value);
-  const sauces = [...document.querySelectorAll("#sauces input:checked")].map(x => x.value);
+// Enviar pedido
+document.getElementById("enviarPedido").addEventListener("click", () => {
+  const salsa = document.getElementById("salsa").value;
 
-  if (!size) {
-    msg.textContent = "Selecciona un tamaño.";
-    msg.style.color = "red";
+  if (!tamañoSeleccionado) {
+    alert("Selecciona un tamaño");
+    return;
+  }
+  if (toppingsSeleccionados.length < 1) {
+    alert("Selecciona toppings");
+    return;
+  }
+  if (!salsa) {
+    alert("Selecciona una salsa");
     return;
   }
 
-  const order = {
-    size,
-    toppings,
-    sauces,
-    time: new Date().toLocaleTimeString()
+  const nuevoPedido = {
+    tamaño: tamañoSeleccionado,
+    toppings: toppingsSeleccionados,
+    salsa: salsa,
+    hora: new Date().toLocaleTimeString()
   };
 
-  push(ref(db, "orders"), order)
-    .then(() => {
-      msg.style.color = "green";
-      msg.textContent = "Pedido enviado ✔️";
+  push(ref(db, "pedidos/"), nuevoPedido);
 
-      sizeSelect.value = "";
-      toppingsBoxes.forEach(x => { x.checked = false; x.disabled = false; });
-      sauceBoxes.forEach(x => (x.checked = false));
-    })
-    .catch(err => console.error(err));
+  alert("Pedido enviado ✔");
+
+  // Reset
+  location.reload();
 });
