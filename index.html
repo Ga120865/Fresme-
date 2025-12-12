@@ -4,27 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Fresme — Kiosk</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="kiosk">
-    <header><h1>Fresme — Personaliza tus fresas</h1></header>
+    <header class="kiosk-header">
+      <h1>Personaliza tus Fresas</h1>
+    </header>
 
     <section class="card">
+      <h2>Nombre y Apellido</h2>
       <div class="row inputs">
         <input id="nombre" placeholder="Nombre" />
         <input id="apellido" placeholder="Apellido" />
       </div>
 
-      <div class="row">
-        <button class="pill" data-value="Comer aquí" id="eatHere">Comer aquí</button>
-        <button class="pill" data-value="Para llevar" id="takeAway">Para llevar</button>
+      <h2>¿Para llevar o comer aquí?</h2>
+      <div class="row options" id="orderType">
+        <button class="pill" data-value="Para comer aquí">Comer aquí</button>
+        <button class="pill" data-value="Para llevar">Para llevar</button>
       </div>
     </section>
 
     <section class="card">
-      <h2>Elige tamaño</h2>
-      <div class="row sizes">
+      <h2>Elige el tamaño</h2>
+      <div class="row options sizes">
         <button class="size-btn" data-price="2.50" data-salsas="1" data-toppings="1">Pequeño — $2.50</button>
         <button class="size-btn" data-price="2.90" data-salsas="1" data-toppings="2">Mediano — $2.90</button>
         <button class="size-btn" data-price="3.25" data-salsas="2" data-toppings="2">Grande — $3.25</button>
@@ -38,7 +42,7 @@
         <button id="addExtraSalsa" class="extra">+ Extra Salsa ($0.75)</button>
         <button id="removeExtraSalsa" class="extra danger">– Quitar Salsa Extra</button>
       </div>
-      <p class="note">Límite según tamaño + extras.</p>
+      <p class="note">Límite según tamaño. Usa botón de extra si quieres más.</p>
     </section>
 
     <section class="card">
@@ -48,12 +52,17 @@
         <button id="addExtraTopping" class="extra">+ Extra Topping ($0.50)</button>
         <button id="removeExtraTopping" class="extra danger">– Quitar Topping Extra</button>
       </div>
-      <p class="note">Límite según tamaño + extras.</p>
+      <p class="note">Límite según tamaño. Extras agregan costo.</p>
     </section>
 
     <section class="card summary">
-      <div class="row"><div><strong>Base:</strong> $<span id="basePrice">0.00</span></div><div><strong>Extras:</strong> $<span id="extrasPrice">0.00</span></div></div>
-      <div class="row total"><h2>Total: $<span id="total">0.00</span></h2></div>
+      <div class="row">
+        <div><strong>Subtotal base:</strong> $<span id="basePrice">0.00</span></div>
+        <div><strong>Extras:</strong> $<span id="extrasPrice">0.00</span></div>
+      </div>
+      <div class="row total">
+        <h2>Total: $<span id="total">0.00</span></h2>
+      </div>
 
       <div class="row">
         <button id="sendOrder" class="send">Enviar Pedido</button>
