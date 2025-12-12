@@ -1,100 +1,40 @@
-:root{
-  --bg: #f6f2f5;
-  --card: #ffffff;
-  --accent: #d1006b;
-  --muted: #9b9b9b;
-  --pill: #ffd9ec;
+body {
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: "Inter", system-ui, Arial, sans-serif;
-  background:var(--bg);
-  -webkit-font-smoothing:antialiased;
-  color:#222;
-}
-main{
-  max-width:900px;
-  margin:20px auto;
-  padding:18px;
+h1 {
+  margin-top: 20px;
 }
 
-.kiosk-header{
-  margin-bottom:12px;
-}
-.kiosk-header h1{
-  margin:0;
-  color:var(--accent);
-  font-size:28px;
-}
-
-/* card */
-.card{
-  background:var(--card);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:16px;
-  box-shadow:0 8px 30px rgba(0,0,0,0.06);
+.card {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 450px;
+  margin: 20px auto;
+  border-radius: 15px;
+  box-shadow: 0 0 10px #ccc;
 }
 
-h2{margin:0 0 12px 0;font-size:18px}
-
-.inputs input{
-  padding:12px;
-  font-size:16px;
-  border-radius:10px;
-  border:1px solid #eee;
-  width:48%;
+.size-btn, .topping-btn, .submit-btn {
+  padding: 12px;
+  margin: 8px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: #ff72b6;
+  color: white;
+  font-size: 18px;
 }
 
-/* options and sizes */
-.options{display:flex;gap:12px;flex-wrap:wrap}
-.pill, .size-btn{
-  padding:16px 18px;
-  border-radius:14px;
-  border:none;
-  background:var(--pill);
-  font-size:16px;
-  cursor:pointer;
-  min-width:180px;
-}
-.pill.selected, .size-btn.selected{
-  background:var(--accent);
-  color:white;
+.topping-btn.selected {
+  background: #ff2e98;
 }
 
-/* grid */
-.grid{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
+.submit-btn {
+  background: #28c728;
+  font-size: 20px;
+  width: 80%;
 }
-.grid button{
-  padding:14px;
-  border-radius:12px;
-  min-width:44%;
-  border:none;
-  background:#ffe6f2;
-  cursor:pointer;
-}
-.grid button.selected{background:var(--accent);color:white}
-
-.row{display:flex;gap:12px;align-items:center;justify-content:space-between}
-
-.extras{margin-top:12px}
-.extra{padding:12px;border-radius:10px;border:none;background:#ffd9ec;cursor:pointer}
-.extra.danger{background:#ffb3c6}
-
-.send{
-  background:var(--accent);
-  color:white;
-  padding:14px;
-  font-size:18px;
-  border-radius:12px;
-  width:100%;
-  cursor:pointer;
-}
-
-.note{color:var(--muted);font-size:13px;margin-top:8px}
-.msg{margin-top:8px;font-weight:bold}
