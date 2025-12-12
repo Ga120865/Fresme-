@@ -1,4 +1,4 @@
-// firebase.js (coloca exactamente este archivo en la raíz)
+// firebase.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
