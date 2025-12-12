@@ -1,60 +1,40 @@
 body {
-  font-family: Arial;
-  background: #f5f5f5;
-  padding: 20px;
+  background: #f7f7f7;
+  font-family: Arial, sans-serif;
   text-align: center;
 }
 
-.title {
-  font-size: 32px;
-  font-weight: bold;
+h1 {
+  margin-top: 20px;
 }
 
 .card {
-  width: 90%;
-  max-width: 480px;
   background: white;
-  margin: 20px auto;
   padding: 20px;
+  width: 90%;
+  max-width: 450px;
+  margin: 20px auto;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 0 10px #ccc;
 }
 
-label {
-  font-size: 20px;
-}
-
-select {
-  width: 100%;
+.size-btn, .topping-btn, .submit-btn {
   padding: 12px;
-  margin: 10px 0 20px;
-  font-size: 18px;
-  border-radius: 8px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-button {
-  width: 100%;
-  padding: 15px;
-  background: #ff5f9e;
+  margin: 8px;
+  border-radius: 10px;
   border: none;
-  color: white;
-  font-size: 20px;
-  border-radius: 12px;
   cursor: pointer;
-}
-
-button:hover {
-  background: #ff3c86;
-}
-
-#msg {
-  margin-top: 15px;
+  background: #ff72b6;
+  color: white;
   font-size: 18px;
+}
+
+.topping-btn.selected {
+  background: #ff2e98;
+}
+
+.submit-btn {
+  background: #28c728;
+  font-size: 20px;
+  width: 80%;
 }
