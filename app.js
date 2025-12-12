@@ -3,8 +3,8 @@ import { db } from "./firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
 /* opciones */
-const salsasList = ["Chocolate blanco","Chocolate negro","Pistacho","Kinder Bueno","Frambuesa"];
-const toppingsList = ["Chispas de colores","Chispas de chocolate","Caramelo","Galletas","Oreo"];
+const salsasList = ["Chocolate","Pistacho","Caramelo","Frambuesa","Chantilly","Nutella","Leche Condensada"];
+const toppingsList = ["Grageas","Gotas de chocolate","Oreo"];
 
 /* estado */
 let maxSalsas = 0, maxToppings = 0;
@@ -136,3 +136,4 @@ document.getElementById("sendOrder").onclick = async ()=>{
     console.error(err); msgEl.style.color="red"; msgEl.innerText="Error enviando pedido. Revisa consola.";
   }
 };
+
